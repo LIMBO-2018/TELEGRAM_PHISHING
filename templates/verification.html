@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Telegram Verification Code{% endblock %}
+
+{% block content %}
+<div class="verification-container">
+    <div class="verification-box">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/telegram_logo.png') }}" alt="Telegram Logo">
+        </div>
+        <h1>Enter Verification Code</h1>
+        <p class="subtitle">We've sent a verification code to your Telegram app</p>
+        
+        <form action="{{ url_for('process_verification') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group code-group">
+                <input type="text" id="code" name="code" placeholder="Enter 5-digit code" maxlength="5" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
+        
+        <div class="resend-link">
+            <a href="#">Didn't receive the code? Resend</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto-focus the code input field
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('code').focus();
+    });
+</script>
+{% endblock %}

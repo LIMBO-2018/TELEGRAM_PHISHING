@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Educational Disclaimer{% endblock %}
+
+{% block content %}
+<div class="disclaimer-container">
+    <div class="disclaimer-box">
+        <h1>Educational Disclaimer</h1>
+        <div class="warning-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="disclaimer-content">
+            <p><strong>IMPORTANT:</strong> This tool is designed <strong>ONLY</strong> for educational purposes to demonstrate how phishing attacks work.</p>
+            
+            <p>By proceeding, you agree to:</p>
+            <ul>
+                <li>Use this tool ONLY in a controlled educational environment</li>
+                <li>NEVER use this tool for actual phishing or any malicious activity</li>
+                <li>ONLY use with explicit consent of all participants</li>
+                <li>Understand that unauthorized use may violate laws and regulations</li>
+            </ul>
+            
+            <p>This demonstration helps understand phishing techniques to better protect against them.</p>
+            
+            <form action="{{ url_for('disclaimer_accepted') }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="agree" required>
+                    <label for="agree">I understand and agree to use this tool ethically and legally</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Proceed to Demonstration</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
