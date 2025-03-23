@@ -66,7 +66,6 @@ This tool is provided for educational purposes only. The developers assume no li
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-```
 
 ## Deployment Instructions
 
