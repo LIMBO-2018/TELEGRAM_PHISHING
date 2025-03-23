@@ -70,7 +70,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Deployment Instructions
 
-To deploy this educational demonstration tool:
+To deploy this educational  tool:
 
 ```bash
 git clone https://github.com/yourusername/telegram-phishing-demo.git
